@@ -1,0 +1,4 @@
+Passos iniciais para gerar o projeto "primeira-api:
+- npm init -y => cria um arquivo package.json com as configs iniciais
+- npx nodemon src/index => para executar o nodemon
+- npm start => executa o projeto depois de configurar no package.json
