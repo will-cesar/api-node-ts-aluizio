@@ -1,4 +1,37 @@
-Passos iniciais para gerar o projeto "primeira-api:
+Passos iniciais para gerar o projeto "primeira-api":
 - npm init -y => cria um arquivo package.json com as configs iniciais
-- npx nodemon src/index => para executar o nodemon
-- npm start => executa o projeto depois de configurar no package.json
+- npm start => executa o projeto depois de configurar o script no package.json
+
+Parâmetros de requisições 
+- Query params
+    - exemplo: http://localhost:3333/projects?title=Node&owner=Aluizio
+        - primeira propriedade => title = Node
+        - segunda propriedade => owner = Aluizio
+    - a partir do ponto "?" serão lidos os parâmetros requisitados
+    - o "&" permite passar mais parâmetros
+    - "request.query" => propriedades utilizadas para ler os parâmetros da query
+
+- Route params
+    - utilizados em put, patch e delete
+    - exemplo de query params:
+        - /projects/:id
+        - http://localhost:3333/projects/10
+
+    - exemplo com N parâmetros:
+        - /projects/:id/owner/:owner_id
+        - http://localhost:3333/projects/10/owner/2
+
+Desestruturação
+- pega apenas a propriedade requisitada
+    - Exemplo: const { title } = request.query;
+        - nesse caso, a query é = { title: 'Node', owner: 'Aluizio' }
+        - resultado => const title = 'Node';
+
+Middleware
+- interceptador de requisições
+- ele pode interromper uma requisição ou pode alterar dados antes de prosseguir para uma requisição
+- um Middleware contém request, response, next;
+    - next permite a continuação para um próximo método ou requisição
+- formas de ativação do Middleware
+    - app.use(nomeDoMiddleware) => ativa o Middleware para todas as rotas da api
+    - app.get('/projects', nomeDoMiddleware, (request, response) => ativa o Middleware apenas para uma rota específica
