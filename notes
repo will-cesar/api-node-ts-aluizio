@@ -4,21 +4,41 @@ Passos iniciais para gerar o projeto "primeira-api":
 
 Passos iniciais para gerar o projeto "api-node-typescript":
 - npm init -y => cria um arquivo package.json com as configs iniciais
+
 - npm i typescript --save-dev => instala o typescript como dependência de desenvolvimento
+
 - npm i express --save => instala o express
+
 - npm i @types/express --save-dev => instala a tipagem associada ao express como dependência de desenvolvimento
+
 - npx tsc --init => inicializa a configuração do typescript no projeto criando o arquivo tsconfig.json
     - dentro do arquivo tsconfig.json, fazer as seguintes configurações:
         - descomentar o "outDir" e deixar dessa forma: "outDir": "./dist"
             - pasta dist => serão gerados os arquivos js compilados do typescript e colocados na pasta dist
         - descomentar o "rootDir" e deixar dessa forma: "rootDir": "./src"
+
 - npx tsc => comando para compilar o typescript
+
 - npm i ts-node-dev --save-dev => biblioteca para gerar o build em ambiente de dev
     - ir no arquivo package.json e criar um script de dev para rodar o projeto
     - "dev": "ts-node-dev --inspect --ignore-watch node_modules src/server.ts"
         - inspect => inspeciona cada mudança
         - ignore-watch node_modules => ignora a pasta node_modules
         - src/server.ts => aguarda as mudanças do arquivo server.ts
+
+- npm i knex --save => instala o pacote do Knex.Js, um SQL query builder
+
+- npm i sqlite3 => pacote para utilizar o banco SQLite3
+    - criar uma pasta chamada "database" para configurar a conexão como banco e suas migrations
+    - criar o arquivo "knexfile.ts" na raiz do projeto para rodar a conexão e a migration
+
+- npx knex --knexfile knexfile.ts migrate:latest => cria o banco de dados
+    - para verificar se criou o banco é necessário instalar uma extensão no vscode chamada SQLite
+    - shift + ctrl + p => e digitar "open database"
+    - escolher o banco 
+    - pode também criar um comando no package.json para rodar o script do knex
+        - exemplo: "knex:migrate": "knex --knexfile knexfile.ts migrate:latest"
+        - npm run knex:migrate
 
 
 Parâmetros de requisições 

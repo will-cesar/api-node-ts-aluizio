@@ -42,6 +42,7 @@ npm start
 
 ```
 - express
+- knex.js
 - ts-node-dev
 - typeScript
 - @types/express
