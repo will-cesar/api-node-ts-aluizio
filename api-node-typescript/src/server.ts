@@ -5,6 +5,8 @@ import routes from './routes';
 const app = express();
 const port = 3333;
 
+app.use(express.json());
+
 app.use(routes);
 
 // disponibiliza uma rota com o conteúdo estático para o usuário poder baixar
