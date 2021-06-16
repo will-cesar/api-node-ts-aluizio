@@ -1,9 +1,17 @@
 import express from 'express';
+import cors from 'cors';
 import path from 'path';
 import routes from './routes';
 
-const app = express();
 const port = 3333;
+const app = express();
+
+app.use(cors()); // permite que qualquer domínio possa acessar a api
+
+// exemplo de uso do Cors em produção para proteger a api
+// app.use(cors({
+//     origin: ['dominio.com.br']
+// }));
 
 app.use(express.json());
 

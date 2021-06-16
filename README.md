@@ -41,8 +41,10 @@ npm start
 ### Pacotes utilizados: ###
 
 ```
+- cors
 - express
 - knex.js
+- multer
 - ts-node-dev
 - typeScript
 - @types/express

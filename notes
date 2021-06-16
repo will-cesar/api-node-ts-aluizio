@@ -40,6 +40,12 @@ Passos iniciais para gerar o projeto "api-node-typescript":
         - exemplo: "knex:migrate": "knex --knexfile knexfile.ts migrate:latest"
         - npm run knex:migrate
 
+- npm i cors => instala o pacote de controle de Cors na api
+- npm i --save-dev @types/cors => instala o pacote de tipagem do multer do Cors
+
+- npm i multer => pacote responsável pelo o upload de arquivos
+- npm i --save-dev @types/multer => instala o pacote de tipagem do multer
+
 Seeds
 - recurso disponibilizado pelo Knex para popular as tabelas com informações com um único comando
     - criar uma pasta "seeds", e dentro dela criar um arquivo para inserir os dados mockados na tabela

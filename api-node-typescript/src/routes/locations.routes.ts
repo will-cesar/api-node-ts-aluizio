@@ -1,7 +1,51 @@
 import { request, response, Router } from 'express';
+import multer from 'multer';
 import knex from '../database/connection';
+import multerConfig from '../config/multer';
 
 const locationsRouter = Router();
+
+const upload = multer(multerConfig);
+
+locationsRouter.get('/', async (request, response) => {
+    const { city, uf, items } = request.query;
+
+    if (city && uf && items) {
+        const parsedItems: Number[] = String(items)
+            .split(',')
+            .map(item => Number(item.trim()))
+
+        const locations = await knex('locations')
+            .join('location_items', 'locations.id', '=', 'location_items.location_id')
+            .whereIn('location_items.item_id', parsedItems)
+            .where('city', '=', String(city))
+            .where('uf', String(uf))
+            .distinct()
+            .select('locations.*');
+
+        return response.json(locations);
+    }
+
+    const locations = await knex('locations').select('*');
+    return response.json(locations);
+});
+
+locationsRouter.get('/:id', async (request, response) => {
+    const { id } = request.params;
+
+    const location = await knex('locations').where('id', id).first();
+
+    if (!location) {
+        return response.status(400).json({ message: 'Location not found.' });
+    }
+
+    const items = await knex('items')
+        .join('location_items', 'items.id', '=', 'location_items.item_td')
+        .where('location_items.location_id', id)
+        .select('items.title')
+
+    return response.json({ location, items });
+});
 
 locationsRouter.post('/', async (request, response) => {
     const {
@@ -56,8 +100,10 @@ locationsRouter.post('/', async (request, response) => {
     });
 });
 
-locationsRouter.get('/:id', async (request, response) => {
+locationsRouter.put('/:id', upload.single('image'), async (request, response) => {
     const { id } = request.params;
+
+    const image = request.file.filename;
 
     const location = await knex('locations').where('id', id).first();
 
@@ -65,12 +111,14 @@ locationsRouter.get('/:id', async (request, response) => {
         return response.status(400).json({ message: 'Location not found.' });
     }
 
-    const items = await knex('items')
-        .join('location_items', 'items.id', '=', 'location_items.item_td')
-        .where('location_items.location_id', id)
-        .select('items.title')
+    const locationUpdated = {
+        ...location,
+        image
+    }
 
-    return response.json({ location, items });
+    await knex('locations').update(locationUpdated).where('id', id);
+
+    return response.json(locationUpdated);
 });
 
 export default locationsRouter;
