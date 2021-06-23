@@ -1,11 +1,15 @@
-import { request, response, Router } from 'express';
+import { Router } from 'express';
 import multer from 'multer';
+import { celebrate, Joi } from 'celebrate';
 import knex from '../database/connection';
 import multerConfig from '../config/multer';
+import isAuthenticated from '../middlewares/isAuthenticated';
 
 const locationsRouter = Router();
 
 const upload = multer(multerConfig);
+
+locationsRouter.use(isAuthenticated);
 
 locationsRouter.get('/', async (request, response) => {
     const { city, uf, items } = request.query;
@@ -47,7 +51,20 @@ locationsRouter.get('/:id', async (request, response) => {
     return response.json({ location, items });
 });
 
-locationsRouter.post('/', async (request, response) => {
+locationsRouter.post('/', celebrate({
+    body: Joi.object().keys({
+        name: Joi.string().required(),
+        email: Joi.string().required().email(),
+        whatsapp: Joi.string().required(),
+        latitude: Joi.string().required(),
+        longitude: Joi.string().required(),
+        city: Joi.string().required(),
+        uf: Joi.string().required().max(2),
+        items: Joi.string().required(),
+    })
+}, {
+    abortEarly: false // mostra todos os erros de validação no response
+}), async (request, response) => {
     const {
         name,
         email,
@@ -100,25 +117,25 @@ locationsRouter.post('/', async (request, response) => {
     });
 });
 
-locationsRouter.put('/:id', upload.single('image'), async (request, response) => {
-    const { id } = request.params;
+// locationsRouter.put('/:id', upload.single('image'), async (request, response) => {
+//     const { id } = request.params;
 
-    const image = request.file.filename;
+//     const image = request.file.filename;
 
-    const location = await knex('locations').where('id', id).first();
+//     const location = await knex('locations').where('id', id).first();
 
-    if (!location) {
-        return response.status(400).json({ message: 'Location not found.' });
-    }
+//     if (!location) {
+//         return response.status(400).json({ message: 'Location not found.' });
+//     }
 
-    const locationUpdated = {
-        ...location,
-        image
-    }
+//     const locationUpdated = {
+//         ...location,
+//         image
+//     }
 
-    await knex('locations').update(locationUpdated).where('id', id);
+//     await knex('locations').update(locationUpdated).where('id', id);
 
-    return response.json(locationUpdated);
-});
+//     return response.json(locationUpdated);
+// });
 
 export default locationsRouter;

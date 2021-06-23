@@ -31,6 +31,9 @@ Passos iniciais para gerar o projeto "api-node-typescript":
 - npm i sqlite3 => pacote para utilizar o banco SQLite3
     - criar uma pasta chamada "database" para configurar a conexão como banco e suas migrations
     - criar o arquivo "knexfile.ts" na raiz do projeto para rodar a conexão e a migration
+    - criar um comando para rodar as migrations
+        - exemplo: "knex:migrate": "knex --knexfile knexfile.ts migrate:latest"
+        - npm run knex:migrate
 
 - npx knex --knexfile knexfile.ts migrate:latest => cria o banco de dados
     - para verificar se criou o banco é necessário instalar uma extensão no vscode chamada SQLite
@@ -45,6 +48,19 @@ Passos iniciais para gerar o projeto "api-node-typescript":
 
 - npm i multer => pacote responsável pelo o upload de arquivos
 - npm i --save-dev @types/multer => instala o pacote de tipagem do multer
+
+- npm i celebrate => pacote que aplica um middleware para validação dos dados nas requisições
+    - dentro do pacote é utilizado a biblioteca Joi de validação
+    - ela que é a responsável por atribuir métodos de validação dos dados
+    - https://joi.dev/
+
+- npm i bcryptjs => pacote utilizado para criptografar strings
+- npm i --save-dev @types/bcryptjs => instala os tipos referentes ao pacote
+
+- npm i jsonwebtoken => pacote para implementação do JWT (Json web token)
+- npm i --save-dev @types/jsonwebtoken => instala os tipos referentes ao pacote
+
+Observações:
 
 Seeds
 - recurso disponibilizado pelo Knex para popular as tabelas com informações com um único comando
